@@ -72,15 +72,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #on initialise la 1ere case avec une valeur, variante apportée à la régle
         # normalement le joueur peut choisir son 1er symbol
         self.premiere_case()
-        
-        #randomItem = random.choice(formes)
-        #self.bouton.clicked.connect(self.click)
-        
-        
-        
-        # on commence par demander quel symbol choisir pour la 1er case
-        
+
+        #on lance une 1ere fois les dès pour lancer la partie
         self.lancer()
+        
+        
 
     def premiere_case(self):
         valeur, image = random.choice(list(self.formes.items()))
@@ -89,15 +85,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.jeu[0][0]=valeur
         
         
-    def click(self, case):
+    def click(self, case):     
+        #on récupère le nom de la case pour pouvoir stocker les infos des valeurs dans un tableau à part
         sending_button = self.sender()
-        print('%s Clicked!' % str(sending_button.objectName()))
+        nom_bouton = sending_button.objectName().split("_")[1]
+        ligne = int(nom_bouton[0])-1
+        colonne = int(nom_bouton[1])-1
+        self.jeu[ligne][colonne]=self.des[0]
         
-        # self.status_label.setText('%s Clicked!' % str(sending_button.objectName()))
-        
-        print("click")
-        case.setStyleSheet("border-image : url(croix.png) stretch;")
+        #on change le background de la case pour afficher le jeu
+        # utiliser border-image permet d'étirer l'image et éviter les répétitions de l'image dans les boutons
+        case.setStyleSheet("border-image : url("+self.formes[self.des[0]]+".png) stretch;")
         case.setEnabled(False)
+        self.des.pop(0)
+        
+        
+        #s'il n'y a plus de coup à jouer on relance les dès pour les prochains coups
+        if len(self.des)==0:
+            self.lancer()
         
         
     def lancer(self):
@@ -107,7 +112,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #     self.des.append(valeur)
         
         #test en faisant une boucle de 2 itérations pour avoir un random simulant un lancé de dès
-        #=> pb nous avions toujours des doubles
+        # => pb nous avions toujours des doubles
         # changement pour faire une liste de random limitant les doubles mais les rendants quand même possible
         # random sur un range plus grand puis on fait la division euclidienne par 6 et on prend cette valeur
         
