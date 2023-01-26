@@ -35,6 +35,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #self.formes = ('barre', 'croix', 'diagonal', 'diese', 'triangle')
         self.formes = {1: 'barre', 2: 'croix', 3: 'diagonal', 4:'diese', 5:'triangle', 6: 'rond'}
+        #variable qui va stocker les valeur des dès randoms pour pouvoir les jouer
         self.des=[]
         
         self.cases = ((self.bouton_11, self.bouton_12, self.bouton_13, self.bouton_14, self.bouton_15),
@@ -52,16 +53,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                ["", "", "", "", ""],
                ]
         
+        #cette variable permet de sélectionner la pénalité pour les lignes sans suite
+        self.point_penalite = -5
+        self.tableau_resultat = {self.resultat_L1: self.point_penalite,
+                     self.resultat_L2: self.point_penalite,
+                     self.resultat_L3: self.point_penalite,
+                     self.resultat_L4: self.point_penalite,
+                     self.resultat_L5: self.point_penalite,
+                     self.resultat_C1: self.point_penalite,
+                     self.resultat_C2: self.point_penalite,
+                     self.resultat_C3: self.point_penalite,
+                     self.resultat_C4: self.point_penalite,
+                     self.resultat_C5: self.point_penalite
+                     }
+        
+        #on initialise les labels contenant le résultat avec la valeur attachée, au début surtout le point de pénalité
+        for key, value in self.tableau_resultat.items():
+            key.setText(str(value))
+        
+        #on attache le signal click sur les boutons représentant les cases à jouer afin d'y attribuer les valeurs des dès
         for ligne in self.cases:
             for case in ligne:
                 case.clicked.connect(partial(self.click, case))
         
-        #on initialise la 1ere case avec une valeur, variante apportée à la régle
+        #on initialise la 1ere case avec une valeur aléatoire, variante apportée à la régle
         # normalement le joueur peut choisir son 1er symbol
         self.premiere_case()
 
         #on lance une 1ere fois les dès pour lancer la partie
-        self.lancer()
+        self.lancer_des()
         
         
 
@@ -76,6 +96,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #on récupère le nom de la case pour pouvoir stocker les infos des valeurs dans un tableau à part
         sending_button = self.sender()
         nom_bouton = sending_button.objectName().split("_")[1]
+        #on retire 1 pour le début à 0
         ligne = int(nom_bouton[0])-1
         colonne = int(nom_bouton[1])-1
         self.jeu[ligne][colonne]=self.des[0]
@@ -85,14 +106,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         case.setStyleSheet("border-image : url("+self.formes[self.des[0]]+".png) stretch;")
         case.setEnabled(False)
         self.des.pop(0)
+        self.image_des[0].setStyleSheet("")
         
+        self.maj_resultat(ligne, colonne)
         
         #s'il n'y a plus de coup à jouer on relance les dès pour les prochains coups
         if len(self.des)==0:
-            self.lancer()
+            self.lancer_des()
         
         
-    def lancer(self):
+    def lancer_des(self):
         #valeur, image = random.choice(list(self.formes.items()))
         # for de in self.image_des:
         #     de.setStyleSheet("border-image : url("+image+".png) stretch;")
@@ -111,6 +134,59 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.image_des[i].setStyleSheet("border-image : url("+image+".png) stretch;")
             self.des.append(valeur)
 
+    
+    def maj_resultat(self, ligne, colonne):
+        #on calcul les résultats rappel des résultats :
+        #  2 symboles = 2 pts
+        #  3 symboles = 3 pts
+        #  4 symboles = 8 pts
+        #  5 symboles = 10 pts
+        
+        score = {1:0, 2: 2, 3: 3, 4: 8, 5: 10}
+        #on recupère les cles du dictionnaire des résultats pour trouver le bon label à mettre à jour pour l'affichage des résultats
+        cle=list(self.tableau_resultat.keys())
+        
+        
+        #on regarde la MAJ du résultat de la ligne
+        symbole_precedent=self.jeu[ligne][0]
+        repetition=1
+        point=0
+        for symbole in self.jeu[ligne][1:]:
+            if symbole == symbole_precedent and symbole != "":
+                repetition+=1
+            else:
+                point+=score[repetition]
+                symbole_precedent=symbole
+                repetition=1
+        
+        #permet de prendre en compte le cas d'une ligne complète avec le même symbole
+        point+=score[repetition]
+        
+        #si on a effectivement marqué des points on fait la MAJ
+        if point!=0:
+            self.tableau_resultat[cle[ligne]]=point
+            cle[ligne].setText(str(point))
+        
+             
+        #on regarde la MAJ du résultat de la colonne
+        symbole_precedent=self.jeu[0][colonne]
+        repetition=1
+        point=0
+        for i in range(1,5):
+            if self.jeu[i][colonne] == symbole_precedent and self.jeu[i][colonne] != "":
+                repetition+=1
+            else:
+                point+=score[repetition]
+                symbole_precedent=self.jeu[i][colonne]
+                repetition=1
+        
+        #permet de prendre en compte le cas d'une ligne complète avec le même symbole
+        point+=score[repetition]
+        
+        #si on a effectivement marqué des points on fait la MAJ
+        if point!=0:
+            self.tableau_resultat[cle[colonne+5]]=point
+            cle[colonne+5].setText(str(point))
         
         
 

@@ -30,7 +30,7 @@
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Box</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <property name="text">
      <string/>
@@ -52,7 +52,7 @@
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Box</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <property name="text">
      <string/>
@@ -61,27 +61,43 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>596</x>
       <y>150</y>
-      <width>47</width>
-      <height>13</height>
+      <width>71</width>
+      <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Dé 1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>710</x>
+      <x>696</x>
       <y>150</y>
-      <width>47</width>
-      <height>13</height>
+      <width>71</width>
+      <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Dé 2</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="bouton_11">
@@ -90,7 +106,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>40</x>
       <y>60</y>
       <width>80</width>
       <height>80</height>
@@ -124,7 +140,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>40</x>
       <y>140</y>
       <width>80</width>
       <height>80</height>
@@ -155,7 +171,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>40</x>
       <y>220</y>
       <width>80</width>
       <height>80</height>
@@ -186,7 +202,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>40</x>
       <y>300</y>
       <width>80</width>
       <height>80</height>
@@ -217,7 +233,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>40</x>
       <y>380</y>
       <width>80</width>
       <height>80</height>
@@ -248,7 +264,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>120</x>
       <y>60</y>
       <width>80</width>
       <height>80</height>
@@ -279,7 +295,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>120</x>
       <y>220</y>
       <width>80</width>
       <height>80</height>
@@ -310,7 +326,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>120</x>
       <y>380</y>
       <width>80</width>
       <height>80</height>
@@ -341,7 +357,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>120</x>
       <y>300</y>
       <width>80</width>
       <height>80</height>
@@ -372,7 +388,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>120</x>
       <y>140</y>
       <width>80</width>
       <height>80</height>
@@ -403,7 +419,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>200</x>
       <y>60</y>
       <width>80</width>
       <height>80</height>
@@ -434,7 +450,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>200</x>
       <y>220</y>
       <width>80</width>
       <height>80</height>
@@ -465,7 +481,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>200</x>
       <y>380</y>
       <width>80</width>
       <height>80</height>
@@ -496,7 +512,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>200</x>
       <y>300</y>
       <width>80</width>
       <height>80</height>
@@ -527,7 +543,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>200</x>
       <y>140</y>
       <width>80</width>
       <height>80</height>
@@ -558,7 +574,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>280</x>
       <y>60</y>
       <width>80</width>
       <height>80</height>
@@ -589,7 +605,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>280</x>
       <y>220</y>
       <width>80</width>
       <height>80</height>
@@ -620,7 +636,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>280</x>
       <y>380</y>
       <width>80</width>
       <height>80</height>
@@ -651,7 +667,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>280</x>
       <y>300</y>
       <width>80</width>
       <height>80</height>
@@ -682,7 +698,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>280</x>
       <y>140</y>
       <width>80</width>
       <height>80</height>
@@ -713,7 +729,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>360</x>
       <y>60</y>
       <width>80</width>
       <height>80</height>
@@ -747,7 +763,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>360</x>
       <y>220</y>
       <width>80</width>
       <height>80</height>
@@ -778,7 +794,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>360</x>
       <y>380</y>
       <width>80</width>
       <height>80</height>
@@ -809,7 +825,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>360</x>
       <y>300</y>
       <width>80</width>
       <height>80</height>
@@ -840,7 +856,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>360</x>
       <y>140</y>
       <width>80</width>
       <height>80</height>
@@ -863,6 +879,246 @@
     </property>
     <property name="flat">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_C1">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>460</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_C2">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>460</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_C3">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>460</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_C4">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>460</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_C5">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>460</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_L1">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>60</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>-5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_L2">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>140</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>-5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_L3">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>220</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>-5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_L4">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>300</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>-5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="resultat_L5">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>380</y>
+      <width>81</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>-5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
