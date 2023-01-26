@@ -5,21 +5,12 @@ Created 25/01/2023
 @author: Matthieu
 """
 
-### appel de l'interface les déclenchement fournisseur IPTV
+
 
 import sys
 from PyQt5 import QtWidgets
 from PyQt5 import uic
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QPushButton, QInputDialog, QLineEdit, QApplication, QMessageBox 
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QMessageBox, QGraphicsScene
-from PyQt5 import QtSvg
 
-import sys 
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QCheckBox 
-from PyQt5.QtWidgets import QFormLayout, QLabel, QLineEdit, QComboBox 
-from PyQt5.QtGui import QPixmap 
 
 from functools import partial
 
@@ -29,13 +20,9 @@ import random
 random.seed(int(time.time()))
 
 
-
-
 #menu principal
 MainFile = "ihm.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(MainFile)
-
-#formes = {'croix'}
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
