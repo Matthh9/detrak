@@ -66,6 +66,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                      self.resultat_C4: self.point_penalite,
                      self.resultat_C5: self.point_penalite
                      }
+        self.calcul_resultat()
         
         #on initialise les labels contenant le résultat avec la valeur attachée, au début surtout le point de pénalité
         for key, value in self.tableau_resultat.items():
@@ -188,6 +189,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.tableau_resultat[cle[colonne+5]]=point
             cle[colonne+5].setText(str(point))
         
+        self.calcul_resultat()
+        
+    
+    def calcul_resultat(self):
+        resultat=sum(self.tableau_resultat.values())
+        self.resultat_general.setText(str(resultat))
         
 
 
