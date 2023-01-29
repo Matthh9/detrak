@@ -11,9 +11,6 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 
-
-from functools import partial
-
 import time
 import random
 #permet d'avoir un aléatoire un peu plus aléatoire
@@ -46,12 +43,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                  )
         self.image_des = (self.de_1, self.de_2)
         
+        self.voisin = {}
+        
+        for ligne in self.cases:
+            for case in ligne:
+                voisin=self.trouver_voisin(case)
+                self.voisin[case]=voisin
+               
+        # print("init voisin")
+        # print(self.voisin)
+        # print()
+        
         self.jeu = [["", "", "", "", ""],
                ["", "", "", "", ""],
                ["", "", "", "", ""],
                ["", "", "", "", ""],
                ["", "", "", "", ""],
                ]
+        
+        self.jeu2 = {}
+            
+        for ligne in self.cases:
+            for case in ligne:
+                self.jeu2[case]=""
+        
+        # print(self.jeu2)
+        
+        self.nbr_case_restante = 25
         
         #cette variable permet de sélectionner la pénalité pour les lignes sans suite
         self.point_penalite = -5
@@ -75,7 +93,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #on attache le signal click sur les boutons représentant les cases à jouer afin d'y attribuer les valeurs des dès
         for ligne in self.cases:
             for case in ligne:
-                case.clicked.connect(partial(self.click, case))
+                case.clicked.connect(self.click)
         
         #on initialise la 1ere case avec une valeur aléatoire, variante apportée à la régle
         # normalement le joueur peut choisir son 1er symbol
@@ -84,6 +102,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #on lance une 1ere fois les dès pour lancer la partie
         self.lancer_des()
         
+        print(self.jeu2)
         
 
     def premiere_case(self):
@@ -91,9 +110,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bouton_11.setStyleSheet("border-image : url("+image+".png) stretch;")
         self.bouton_11.setEnabled(False)
         self.jeu[0][0]=valeur
+        self.jeu2[self.bouton_11]=valeur
+        self.remove_voisin(self.bouton_11)
         
         
-    def click(self, case):     
+    def click(self):     
         #on récupère le nom de la case pour pouvoir stocker les infos des valeurs dans un tableau à part
         sending_button = self.sender()
         nom_bouton = sending_button.objectName().split("_")[1]
@@ -101,19 +122,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ligne = int(nom_bouton[0])-1
         colonne = int(nom_bouton[1])-1
         self.jeu[ligne][colonne]=self.des[0]
+        self.jeu2[sending_button]=self.des[0]
         
         #on change le background de la case pour afficher le jeu
         # utiliser border-image permet d'étirer l'image et éviter les répétitions de l'image dans les boutons
-        case.setStyleSheet("border-image : url("+self.formes[self.des[0]]+".png) stretch;")
-        case.setEnabled(False)
+        sending_button.setStyleSheet("border-image : url("+self.formes[self.des[0]]+".png) stretch;")
+        sending_button.setEnabled(False)
         self.des.pop(0)
         self.image_des[0].setStyleSheet("")
         
         self.maj_resultat(ligne, colonne)
         
+        
+        # self.activer_click_voisin(sending_button)
+        self.remove_voisin(sending_button)
+        # self.check_dependance()
+        
+        self.check_groupe_isole(sending_button)
+        
+        
         #s'il n'y a plus de coup à jouer on relance les dès pour les prochains coups
         if len(self.des)==0:
+            #on réactive toutes les cases ou on peut encore jouer
+            for case in self.voisin.keys():
+                case.setEnabled(True)
+                
             self.lancer_des()
+        # else:
+        #     #si on ne relance pas le des c'est qu'il reste un coup à jouer du coup on active juste les voisins
+        #     print("pressions ",sending_button)
+        #     self.activer_click_voisin(sending_button)
         
         
     def lancer_des(self):
@@ -134,6 +172,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             image=self.formes[valeur]
             self.image_des[i].setStyleSheet("border-image : url("+image+".png) stretch;")
             self.des.append(valeur)
+        
 
     
     def maj_resultat(self, ligne, colonne):
@@ -197,8 +236,91 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.resultat_general.setText(str(resultat))
         
 
-
-
+    def trouver_voisin(self, case):
+        nom_bouton=case.objectName().split("_")[1]
+        ligne = int(nom_bouton[0])-1
+        colonne = int(nom_bouton[1])-1
+        voisin = []
+        
+        for x in range(ligne-1,ligne+2):
+            if x>=0 and x<5:
+                for y in range(colonne-1,colonne+2):
+                    if y>=0 and y<5:
+                        voisin.append(self.cases[x][y]) 
+        voisin.remove(case)
+        
+        return voisin
+    
+    
+    def remove_voisin(self, case):
+        #self.voisin[case]=[]
+        # print("remove voisin")
+        # print("case à supprimer ", case, " ",case.objectName())
+        voisins=self.voisin[case]
+        for voisin in voisins:
+            # print(voisin.objectName())
+            # print(self.voisin[voisin])
+            self.voisin[voisin].remove(case)
+            
+        self.voisin[case]=[-1]
+        # del self.voisin[case]
+        
+        print("fin remove voisin")
+        
+        
+    def check_dependance(self):
+        print("check_dependance")
+        for case,voisins in self.voisin.items():
+            if len(voisins)==1:
+                print("1 seul voisin : dépendance")
+                print(voisins[0].objectName())
+                self.voisin[voisins[0]]=[case]
+        
+                
+    def activer_click_voisin(self, case_joue):
+        for case in self.voisin.keys():
+            case.setEnabled(False)
+        
+        print(case_joue)
+        print("activation case")
+        print(self.voisin[case_joue])
+        for case in self.voisin[case_joue]:
+            case.setEnabled(True)
+            
+            
+    def check_groupe_isole(self, case_joue):
+        print("recherche de groupe isolé")
+        groupes=[]
+        for case in self.jeu2: #pour chaque case
+            print("début traitement pour la case ", case.objectName())
+            trouve=False
+            
+            
+            if self.jeu2[case]=="": #si elle n'est pas jouée, on regarde si elle fait partie d'un groupe
+                print("case vide")
+                for n_groupe in range(0,len(groupes)): #pour chacun des groupes
+                    if case in groupes[n_groupe]:
+                        trouve=True
+                        
+                        for voisin in self.voisin[case]:
+                            if not voisin in groupes[n_groupe]:
+                                groupes[n_groupe].append(voisin)
+                        
+                        break
+                
+                if not trouve:
+                    print("creation d'un nouveau groupe")
+                    groupe=[case]
+                    for voisin in self.voisin[case]:
+                        groupe.append(voisin)
+                    groupes.append(groupe)
+                    
+        print(groupes)
+        
+        #self.groupes=groupes
+        
+        
+                
 
 ##############################################################################
 ### GENERAL
