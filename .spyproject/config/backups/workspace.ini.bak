@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['..\\simulateur_protocole\\exemple_class_interface.py', '..\\..\\..\\.spyder-py3-dev\\temp.py', 'detrak.py', 'ihm.ui', '..\\..\\programme_python\\programme_3.py']
+recent_files = ['..\\simulateur_protocole\\exemple_class_interface.py', '..\\..\\..\\.spyder-py3-dev\\temp.py', 'detrak.py', 'ihm.ui']
 
 [main]
 version = 0.2.0
