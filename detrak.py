@@ -136,7 +136,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         # self.activer_click_voisin(sending_button)
         self.remove_voisin(sending_button)
-        # self.check_dependance()
         
         self.check_groupe_isole(sending_button)
         
@@ -262,62 +261,76 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # print(self.voisin[voisin])
             self.voisin[voisin].remove(case)
             
-        self.voisin[case]=[-1]
+        # self.voisin[case]=[-1]
         # del self.voisin[case]
         
         print("fin remove voisin")
         
-        
-    def check_dependance(self):
-        print("check_dependance")
-        for case,voisins in self.voisin.items():
-            if len(voisins)==1:
-                print("1 seul voisin : dépendance")
-                print(voisins[0].objectName())
-                self.voisin[voisins[0]]=[case]
-        
                 
-    def activer_click_voisin(self, case_joue):
+    def activer_click_voisin(self, voisins):
         for case in self.voisin.keys():
             case.setEnabled(False)
         
-        print(case_joue)
-        print("activation case")
-        print(self.voisin[case_joue])
-        for case in self.voisin[case_joue]:
-            case.setEnabled(True)
+        for voisin in voisins:
+            voisin.setEnabled(True)
             
-            
+        
     def check_groupe_isole(self, case_joue):
+        #pour trouver les groupes isolés on va regarder si en parcourant tous les 
+        #voisins possibles on a un nombre pair ou impair de case
+        #si pair il n'y aura pas de case isolé dans le groupe
+        #si impair on foit forcer le second dès dans ce groupe pour éviter les isolées
         print("recherche de groupe isolé")
         groupes=[]
-        for case in self.jeu2: #pour chaque case
-            print("début traitement pour la case ", case.objectName())
-            trouve=False
-            
-            
-            if self.jeu2[case]=="": #si elle n'est pas jouée, on regarde si elle fait partie d'un groupe
-                print("case vide")
-                for n_groupe in range(0,len(groupes)): #pour chacun des groupes
-                    if case in groupes[n_groupe]:
-                        trouve=True
-                        
-                        for voisin in self.voisin[case]:
-                            if not voisin in groupes[n_groupe]:
-                                groupes[n_groupe].append(voisin)
-                        
-                        break
-                
-                if not trouve:
-                    print("creation d'un nouveau groupe")
-                    groupe=[case]
-                    for voisin in self.voisin[case]:
-                        groupe.append(voisin)
-                    groupes.append(groupe)
-                    
-        print(groupes)
         
-        #self.groupes=groupes
+        case_a_visiter=[c for c in self.jeu2.keys() if self.jeu2[c] == '']
+        
+        while len(case_a_visiter)!=0:
+            print("nonuveau sous groupe")
+            sous_groupe=[]
+            sous_groupe_a_visiter=[case_a_visiter[0]]
+            
+            
+            while len(sous_groupe_a_visiter)!=0:
+                case=sous_groupe_a_visiter[0]
+                
+                case_a_visiter.remove(case)
+                
+                sous_groupe_a_visiter.remove(case)
+                sous_groupe.append(case)
+                
+                voisin=[v for v in self.voisin[case] if v in case_a_visiter]
+                sous_groupe_a_visiter=list(set(sous_groupe_a_visiter + voisin))
+                
+            groupes.append(sous_groupe)
+        
+        #print(groupes)
+        
+        dict_groupes=dict()
+        
+        # for groupe in groupes:
+            # dict_groupes[groupe]=len(groupe)
+            
+            
+        for groupe in groupes:
+            print(len(groupe))
+            if len(groupe) % 2 == 1:
+                print("sous groupe avec nombre impair => isolé")
+                
+                print("voisin de la case")
+                print(self.voisin[case_joue])
+                
+                print("groupe")
+                print(groupe)
+                
+                print("intersection")
+                print(list(set(groupe) & set(self.voisin[case_joue])))
+                instersection=list(set(groupe) & set(self.voisin[case_joue]))
+            
+                self.activer_click_voisin(instersection)
+                break
+
+
         
         
                 
