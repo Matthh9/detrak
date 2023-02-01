@@ -145,7 +145,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
         elif len(self.des)==1:
             groupe_isole=self.check_groupe_isole(sending_button)
-            # print("groupe isole ",groupe_isole)
+            print("groupe isole ",groupe_isole)
             if groupe_isole==0:
                 #ça veut dire qu'on vient d'isoler une case du coup il faut rejouer
                 self.jeu[ligne][colonne]=""
@@ -165,6 +165,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.activer_click_voisin(self.groupe_isole)
                 for voisin in self.groupe_isole:
                     self.voisin[voisin].append(sending_button)
+            elif groupe_isole==-1:
+                self.message_fin("perdu")
             else:
                  coup_valide=True
         
@@ -188,12 +190,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.lancer_des()
             
         if self.nbr_case_restante==0:
-            choix = self.message_victoire()
-            
-            if choix == QtWidgets.QMessageBox.Yes:
-                self.reset()
-            else:
-                self.close()
+            self.message_fin("victoire")
             
 
         
@@ -356,34 +353,48 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #On regarde s'il y a des groupes de case en nombre impair
         # 2 cas, si c'est le premier dés on évite de faire 1 groupe impair
         # si c'est le 2ème dés on évite de faire 2 groupes impairs
+        print("nbr impair : ",nbr_groupe_impair)
         if len(self.des)==2 and nbr_groupe_impair==1:
             instersection=list( set( list(dict_groupes.keys())[0] ) & set(self.voisin[case_joue]) )
             return(1,instersection)
         elif len(self.des)==1 and nbr_groupe_impair==0:
             return(1,[])
-        else : return(0)
+        elif len(self.des)==1 and nbr_groupe_impair==1:
+            return(0)
+        else : return(-1)
         
 
 
-    def message_victoire(self):
-        classement= [14,19,24,29]
-        citation= ["Peut mieux faire","Moyen","Bon","Expert","Grand maître"]
-        resultat_total = int(self.resultat_general.text())
-        
-        classement.append(resultat_total)
-        classement.sort()
-        
-        index = classement.index(resultat_total)
-        
+    def message_fin(self, choix):
         msg = QtWidgets.QMessageBox()
         msg.setIcon(QtWidgets.QMessageBox.Information)
-        msg.setWindowTitle("Félicitation")
-        msg.setText( "Nombre de point : %d"%(resultat_total) )
-        msg.setInformativeText(citation[index])
+        
         msg.setStandardButtons( QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes )
         msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
         
-        return msg.exec_()
+        if choix=="victoire":
+            
+            classement= [14,19,24,29]
+            citation= ["Peut mieux faire","Moyen","Bon","Expert","Grand maître"]
+            resultat_total = int(self.resultat_general.text())
+            
+            classement.append(resultat_total).sort()
+            index = classement.index(resultat_total)
+        
+            msg.setWindowTitle("Félicitation")
+            msg.setText( "Nombre de point : %d"%(resultat_total) )
+            msg.setInformativeText(citation[index]+"\nVoulez-vous rejouer ?")
+        else:
+            msg.setWindowTitle("Game Over")
+            msg.setText( "Perdu, trop de cases isolées" )
+            msg.setInformativeText("Voulez-vous rejouer ?")
+        
+        choix=msg.exec_()
+    
+        if choix == QtWidgets.QMessageBox.Yes:
+            self.reset()
+        else:
+            self.close()
         
         
                 
