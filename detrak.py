@@ -65,10 +65,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.jeu2[case]=""
         
         
-        self.nbr_case_restante = 2
+        self.nbr_case_restante = 25
         
         #cette variable permet de sélectionner la pénalité pour les lignes sans suite
-        self.point_penalite = 2
+        self.point_penalite = 0
         self.tableau_resultat = {self.resultat_L1: self.point_penalite,
                      self.resultat_L2: self.point_penalite,
                      self.resultat_L3: self.point_penalite,
