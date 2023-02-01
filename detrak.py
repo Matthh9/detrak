@@ -25,15 +25,12 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(MainFile)
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def __init__(self):
-        
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         
         #self.formes = ('barre', 'croix', 'diagonal', 'diese', 'triangle')
         self.formes = {1: 'barre', 2: 'croix', 3: 'diagonal', 4:'diese', 5:'triangle', 6: 'rond'}
-        #variable qui va stocker les valeur des dès randoms pour pouvoir les jouer
-        self.des=[]
         
         self.cases = ((self.bouton_11, self.bouton_12, self.bouton_13, self.bouton_14, self.bouton_15),
                  (self.bouton_21, self.bouton_22, self.bouton_23, self.bouton_24, self.bouton_25),
@@ -42,6 +39,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                  (self.bouton_51, self.bouton_52, self.bouton_53, self.bouton_54, self.bouton_55)
                  )
         self.image_des = (self.de_1, self.de_2)
+        
+        #on attache le signal click sur les boutons représentant les cases à jouer afin d'y attribuer les valeurs des dès
+        for ligne in self.cases:
+            for case in ligne:
+                case.clicked.connect(self.click)
+        
+        
+        self.reset()
+        
+        
+
+    def reset(self):
+        #variable qui va stocker les valeur des dès randoms pour pouvoir les jouer
+        self.des=[]
+        
+        for ligne in self.cases:
+            for case in ligne:
+                case.setStyleSheet("")
+                case.setEnabled(True)
         
         #dictionnaire contenant les cases voisines pour chaque case de la grille
         self.voisin = {}
@@ -65,10 +81,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.jeu2[case]=""
         
         
-        self.nbr_case_restante = 2
+        self.nbr_case_restante = 25
         
         #cette variable permet de sélectionner la pénalité pour les lignes sans suite
-        self.point_penalite = 2
+        self.point_penalite = 0
         self.tableau_resultat = {self.resultat_L1: self.point_penalite,
                      self.resultat_L2: self.point_penalite,
                      self.resultat_L3: self.point_penalite,
@@ -85,11 +101,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #on initialise les labels contenant le résultat avec la valeur attachée, au début surtout le point de pénalité
         for key, value in self.tableau_resultat.items():
             key.setText(str(value))
-        
-        #on attache le signal click sur les boutons représentant les cases à jouer afin d'y attribuer les valeurs des dès
-        for ligne in self.cases:
-            for case in ligne:
-                case.clicked.connect(self.click)
+    
         
         #on initialise la 1ere case avec une valeur aléatoire, variante apportée à la régle
         # normalement le joueur peut choisir son 1er symbol
@@ -97,7 +109,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #on lance une 1ere fois les dès pour lancer la partie
         self.lancer_des()
-    
         
 
     def premiere_case(self):
@@ -110,22 +121,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.nbr_case_restante-=1
         
         
-    def click(self):     
+    def click(self): 
         #on récupère le nom de la case pour pouvoir stocker les infos des valeurs dans un tableau à part
         sending_button = self.sender()
         nom_bouton = sending_button.objectName().split("_")[1]
-        #print("nom bouton ",sending_button.objectName())
+        
         #on retire 1 pour le début des listes à 0 => voir si on ne peut pas intégrer ça avec un nom de case prenant ça déjà en compte
         ligne = int(nom_bouton[0])-1
         colonne = int(nom_bouton[1])-1
         self.jeu[ligne][colonne]=self.des[0]
         self.jeu2[sending_button]=self.des[0]
-                
-        # print("sending bouton ",sending_button)
-        # print("voisin ",self.voisin[sending_button])
-        
+
         coup_valide=False
-        
         if len(self.des)==2:
             self.remove_voisin(sending_button)
             
@@ -149,6 +156,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 
                 
                 # print("ERREUR : case imposée sinon une case sera isolée")
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+                msg.setText("Case impossible à jouer car elle entraine une isolation de case, merci de sélectionner une autre case")
+                msg.setWindowTitle("Error")
+                msg.exec_()
+        
                 self.activer_click_voisin(self.groupe_isole)
                 for voisin in self.groupe_isole:
                     self.voisin[voisin].append(sending_button)
@@ -175,9 +188,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.lancer_des()
             
         if self.nbr_case_restante==0:
-            self.message_victoire()
+            choix = self.message_victoire()
             
-            self.close()
+            if choix == QtWidgets.QMessageBox.Yes:
+                self.reset()
+            else:
+                self.close()
             
 
         
@@ -364,8 +380,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         msg.setWindowTitle("Félicitation")
         msg.setText( "Nombre de point : %d"%(resultat_total) )
         msg.setInformativeText(citation[index])
+        msg.setStandardButtons( QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes )
+        msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
         
-        msg.exec_()
+        return msg.exec_()
         
         
                 
